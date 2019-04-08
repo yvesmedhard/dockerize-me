@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  dockerize-me:
+    build:
+      context: '.'
+    ports:
+      - '3000:3000'
+    tty: true
+    stdin_open: true
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432
+      DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: 'true'
+
+  db:
+    image: 'postgres:11.1-alpine'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
