@@ -1,0 +1,8 @@
+/bundle_cache
+**/node_modules
+.git
+Dockerfile
+.DS_Store
+.gitignore
+.env
+.idea

@@ -1,9 +1,10 @@
 version: '3.3'
 
 services:
-  dockerize-me:
+  web:
     build:
       context: '.'
+    command: 'server'
     ports:
       - '3000:3000'
     tty: true
@@ -11,11 +12,31 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432
       DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: 'true'
+      REDIS_URL: redis://redis:6379/1
+
+    volumes:
+      - .:/web
+      - ./bundle_cache:/bundle:rw,delegated
+      - ./node_modules:/web/node_modules:rw,delegated
+    depends_on:
+      - db
+      - redis
+      - mailcatcher
 
   db:
     image: 'postgres:11.1-alpine'
     ports:
       - '5432:5432'
+    volumes:
+      - ./tmp/db:/web/var/lib/postgresql/data,delegated
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ''
+
+  redis:
+    image: redis:4-alpine
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"

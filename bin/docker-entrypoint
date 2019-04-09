@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -e
+
+echo "=== WEB ENTRYPOINT ==="
+
+COMMAND="$1"
+
+echo "=== BUNDLING ==="
+bundle check || bundle install --jobs 20 --retry 5 --binstubs="$BUNDLE_BIN"
+yarn install --check-files
+
+case "$COMMAND" in
+  setup)
+    echo "=== SETUP APPLICATION ==="
+    ./bin/docker-setup
+    ;;
+  server)
+    echo "=== RUNING SERVER ON PORT 3000 ==="
+    rm -f /web/tmp/pids/server.pid
+    rails s -p 3000 -b '0.0.0.0'
+    ;;
+  migrate)
+    echo "=== MIGRATING DATABASE ==="
+    rake db:migrate
+    rake db:test:prepare
+    ;;
+  test)
+    echo "=== RUNING TEST SUIT ==="
+    rake rspec
+    ;;
+  *)
+    echo "=== RUNING COMAND  $*==="
+    sh -c "$*"
+    ;;
+esac
