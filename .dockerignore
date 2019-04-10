@@ -1,5 +1,6 @@
 /bundle_cache
 **/node_modules
+/tmp
 .git
 Dockerfile
 .DS_Store

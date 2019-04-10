@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV.fetch('DATABASE_URL') %>
+  schema_search_path: "public,shared_extensions"
+
+development:
+  <<: *default
+  database: dockerize-me_development
+
+test:
+  <<: *default
+  database: dockerize-me_test
+
+production:
+  <<: *default
+  database: dockerize-me_production

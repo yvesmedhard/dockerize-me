@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+echo "=== Starting database setup for docker development environment ==="
+
+rake db:create
+rake db:migrate
+rake db:seed
+rake db:test:prepare
+
+echo "Database-setup Finished!"

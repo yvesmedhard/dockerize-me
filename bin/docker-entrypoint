@@ -13,7 +13,7 @@ yarn install --check-files
 case "$COMMAND" in
   setup)
     echo "=== SETUP APPLICATION ==="
-    ./bin/docker-setup
+    ./bin/prepare-application
     ;;
   server)
     echo "=== RUNING SERVER ON PORT 3000 ==="
