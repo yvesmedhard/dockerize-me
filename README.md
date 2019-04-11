@@ -1,13 +1,24 @@
-#### Setup com Docker
-- Instalação do docker
+# Dockerize-me
 
-  - Instale o docker no seu sistema (aqui exemplificamos com Linux e Snap)
+This is an rails application used for sampling a Development Environment docker structure. Use as a start point for a new rails application (while is updated) or as reference on what to do to hava a dockerized environment in few minutes.
+
+Check what we did in:
+- Dockerfile: File thate creates the project image.
+- Docker-Entrypoint: Script that runs whenever you start an application container generated with the image.
+- Docker-compose: File responsible for structuring the required services to have a development environment.
+- Database-setup: Script that runs some database migrations for when you start the project first time.
+- DockerIgnore: File responsible on ignoring some files/folders in order to make other Docker proccess idempotent.
+
+#### Setup with Docker
+- Docker installation
+
+  - Install docker on your system (exemples with Linux and Snap)
 
     ```bash
       sudo snap install docker --devmode
     ```
 
-  - Crie e entre no grupo docker. Visto em https://askubuntu.com/questions/941816/permission-denied-when-running-docker-after-installing-it-as-a-snap
+  - Create and enter docker group. As seen in https://askubuntu.com/questions/941816/permission-denied-when-running-docker-after-installing-it-as-a-snap
 
     ```bash
       $ newgrp docker
@@ -17,38 +28,38 @@
       $ sudo snap enable docker
     ```
 
-- Fazer o Setup da Aplicação
+- Setup the applicaiton
   ```bash
-    git clone git@git.dev.codus.com.br:visa/core.git
+    git https://git.dev.codus.com.br/yves.medhard/railsnewdockerized.git
     ./bin/setup
   ```
-- Subir aplicação
+- Run Application
 
-  - Completa
+  - Complete
     ```bash
       docker-compose up
     ```
-  - Apenas Web
+  - Only Web
     ```bash
       docker-compose up web
     ```
-  - Apenas Web com portas conectadas (debug)
+  - Only Web with connected ports (debug)
     ```bash
       docker-compose run --service-ports web server
     ```
-  - Outros comandos
+  - Other commands
     ```bash
       docker-compose run {aplicação} {comando}
     ```
-    Aplicações:
+    Application:
     - web
 
-    Comandos:
-    - setup: Faz o setup da aplicação
-    - server: Inicia o servidor da aplicação
-    - test: Roda a suite de testes da aplicação
-    - migrate: Realiza a migração do banco
-    - Qualquer outro comando será executado no ambiente da aplicação selecionada
+    Comands:
+    - setup: Setups the application
+    - server: Start application server.
+    - test: Runs test suit
+    - migrate: Migrates test and developent
+    - Any other command is executed
 
   - A server is already running. Check /web/tmp/pids/server.pid.
     ```bash
@@ -56,9 +67,7 @@
     ```
   - Failed to save 'file': Insufficient permissions. Select 'Retry as Sudo' to retry as superuser.
 
-    Isso ocorre pois o docker gera os arquivos como `root` e com permissão de edição apenas para o usuário `docker`.
-
-    Para editar devemos dar permissão para nosso usuário
+    This occours because docker generates files in a isolated namespace, with an unique user. That makes the file unaccessible to other users requiring `root` permission to edit. We can do it with the program chown in super user mode.
     ```bash
       sudo chown -R {user} {file or folder}
     ```
@@ -66,4 +75,4 @@
       ```bash
         sudo chown -R codus db/
       ```
-      Obs: O parâmetro `-R` configura o programa para dar permissão para todos os arquivos filhos da pasta selecionada de forma recursiva.
+      Obs: The parameter `-R` sets the program to change the permission to all child files in the folder specified recursivelly.
