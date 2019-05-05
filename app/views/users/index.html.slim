@@ -22,7 +22,7 @@
               th[scope="col"]
           tbody
 
-            = @presenter.users.each do |user|
+            = @presenter.users.each_with_index do |user, index|
               tr
                 th[scope="row"]
                   = user.id
@@ -33,6 +33,6 @@
                 td
                   = user.created_at
                 td
-                  =link_to 'Visualizar', user_path(user), class: 'btn btn-primary'
+                  =link_to 'Visualizar', user_path(user), class: "btn btn-primary cpy-row-#{index}"
       else
         | No Users

@@ -13,6 +13,10 @@ module Users
       find('.cpy-create-user').click
     end
 
+    def click_show_button_on_row(row_number)
+      find(".cpy-row-#{row_number}").click
+    end
+
     def has_loaded_page?
       has_selector?('.users-index-page')
     end

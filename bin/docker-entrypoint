@@ -38,7 +38,7 @@ case "$COMMAND" in
     echo "=== RUNING INTEGRATION SPECS ==="
     RAILS_ENV=test rake db:drop db:create db:migrate db:seed
     rake wait_test_server
-    rspec -t feature
+    rspec -t integration
     ;;
   integration-console)
     echo "===RUNING FEATURE TEST CONSOLE==="
