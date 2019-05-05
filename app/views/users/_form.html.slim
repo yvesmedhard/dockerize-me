@@ -1,0 +1,19 @@
+
+- disabled ||= nil
+= simple_form_for(user, url: url, method: method, wrapper: :horizontal_form,
+                  defaults: { \
+                    input_html: { \
+                      class: 'form-control form-horizontal col-sm-5',
+                      include_blank: false,
+                      disabled: disabled },
+                    wrapper_html: { class: 'form-group row' },
+                    label_html: { class: 'col-sm-2 control-label' } \
+                  }) do |f|
+  = f.input :name
+  = f.input :email
+
+  .row
+    .col-7.pr-4.pl-1
+      - unless disabled
+        = f.submit 'Save', class: "btn btn-success float-right"
+      = link_to 'Back', users_path, class: 'btn btn-light float-left'

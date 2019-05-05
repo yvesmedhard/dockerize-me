@@ -27,7 +27,24 @@ case "$COMMAND" in
     ;;
   test)
     echo "=== RUNING TEST SUIT ==="
-    rake rspec
+    rspec
+    ;;
+  integration-server)
+    echo "=== RUNING TEST SERVER ON PORT $PORT ==="
+    rm -f /web/tmp/pids/server.pid
+    rails s -p $PORT -b '0.0.0.0'
+    ;;
+  integration-specs)
+    echo "=== RUNING INTEGRATION SPECS ==="
+    RAILS_ENV=test rake db:drop db:create db:migrate db:seed
+    rake wait_test_server
+    rspec -t feature
+    ;;
+  integration-console)
+    echo "===RUNING FEATURE TEST CONSOLE==="
+    RAILS_ENV=test rake db:drop db:create db:migrate db:seed
+    rake wait_test_server
+    bash
     ;;
   *)
     echo "=== RUNING COMAND  $*==="

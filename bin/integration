@@ -1,0 +1,54 @@
+#!/bin/bash -e
+
+set -e
+
+echo "=== INTEGRATION SPECS ==="
+
+COMMAND="$1"
+
+stop_integration_server () {
+  echo ">>> STOPING INTEGRATION-SERVER CONTAINER"
+  docker-compose -f integration-compose.yml stop integration-server
+}
+
+title () {
+  echo "=== $1 ==="
+}
+
+info () {
+  echo ">>>> $1"
+}
+
+case "$COMMAND" in
+  oneoff)
+    title "RUNNING IN ONEOFF MODE"
+    stop_integration_server
+    docker-compose -f integration-compose.yml run --rm integration
+    info "STOPING AND REMOVING CONTAINERS"
+    docker-compose -f integration-compose.yml down
+    info "DONE"
+    ;;
+  run)
+    title "RUNNING INTEGRATION SPECS"
+    stop_integration_server
+    info "RUNNING INTEGRATION SPECS"
+    docker-compose -f integration-compose.yml run --rm integration
+    info "DONE"
+    ;;
+  console)
+    title "RUNNING INTEGRATION CONSOLE"
+    stop_integration_server
+    info "RUNNING INTEGRATION SPECS"
+    docker-compose -f integration-compose.yml run --rm integration integration-console
+    info "DONE"
+    ;;
+  remove)
+    title "REMOVING CONTAINERS"
+    docker-compose -f integration-compose.yml down
+    info "DONE"
+    ;;
+  *)
+    title "RUNING COMAND "
+    sh -c "$*"
+    ;;
+esac

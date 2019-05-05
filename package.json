@@ -1,5 +1,9 @@
 {
   "name": "dockerize-me",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "bootstrap": "4.3.1",
+    "jquery": "3",
+    "popper.js": "^1.15.0"
+  }
 }

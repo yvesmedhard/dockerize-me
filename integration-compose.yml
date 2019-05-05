@@ -1,0 +1,73 @@
+version: '3.3'
+networks:
+  integration_network:
+    driver: bridge
+
+services:
+  integration:
+    networks:
+      integration_network: {}
+    build: .
+    image: dockerize-me_web
+    command: integration-specs
+    tty: true
+    stdin_open: true
+    environment:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@integration-db:5432
+      DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: 'true'
+      REDIS_URL: redis://redis:6379/1
+      CAPYBARA_APP_HOST: http://integration-server:9001
+      SELENIUM_URL: http://integration-chrome:4444/wd/hub
+      # USE_HEADLESS_CHROME:
+    volumes:
+      - .:/web
+      - ./bundle_cache:/bundle:rw,delegated
+      - ./node_modules:/web/node_modules:rw,delegated
+    depends_on:
+      - integration-db
+      - integration-redis
+      - integration-server
+      - integration-chrome
+
+  integration-server:
+    networks:
+      integration_network: {}
+    image: dockerize-me_web
+    command: integration-server
+    environment:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@integration-db:5432
+      DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: 'true'
+      REDIS_URL: redis://redis:6379/1
+      PORT: 9001
+      # USE_HEADLESS_CHROME:
+    volumes:
+      - .:/web
+      - ./bundle_cache:/bundle:rw,delegated
+      - ./node_modules:/web/node_modules:rw,delegated
+    depends_on:
+      - integration-db
+      - integration-redis
+
+  integration-db:
+    networks:
+      integration_network: {}
+    image: 'postgres:11.1-alpine'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
+
+  integration-redis:
+    networks:
+      integration_network: {}
+    image: redis:4-alpine
+
+  integration-chrome:
+    networks:
+      integration_network: {}
+    image: selenium/standalone-chrome-debug
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+       - 5903:5900

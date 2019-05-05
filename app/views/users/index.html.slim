@@ -1,0 +1,29 @@
+.row
+  .col-10
+    h1 Users
+  .col-2
+    = link_to 'Create User', new_user_path, class: 'btn btn-primary'
+
+.row
+  .col
+    table.table
+      thead
+        tr
+          th[scope="col"]
+            | #
+          th[scope="col"]
+            | Name
+          th[scope="col"]
+            | Email
+          th[scope="col"]
+      tbody
+        = @presenter.users.each do |user|
+          tr
+            th[scope="row"]
+              = user.id
+            td
+              = user.name
+            td
+              = user.email
+            td
+              =link_to 'Visualizar', user_path(user), class: 'btn btn-primary'

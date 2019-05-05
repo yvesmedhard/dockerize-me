@@ -1,0 +1,5 @@
+.row
+  .col-12
+    h1 Create User
+  .col
+    = render partial: 'form', locals: { user: @user, url: users_path, method: :post, disabled: false}
