@@ -10,5 +10,5 @@ module BrowserHelpers
 end
 
 RSpec.configure do |config|
-  config.include BrowserHelpers if config.filter_manager.inclusions.rules[:e2e]
+  config.include BrowserHelpers
 end
