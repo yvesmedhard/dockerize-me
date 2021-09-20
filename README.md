@@ -3,7 +3,7 @@
 This is an rails application used for sampling a Development Environment docker structure. Use as a start point for a new rails application (while is updated) or as reference on what to do to hava a dockerized environment in few minutes.
 
 Check what we did in:
-- Dockerfile: File thate creates the project image.
+- Dockerfile: File that creates the project image.
 - Docker-Entrypoint: Script that runs whenever you start an application container generated with the image.
 - Docker-compose: File responsible for structuring the required services to have a development environment.
 - Database-setup: Script that runs some database migrations for when you start the project first time.
